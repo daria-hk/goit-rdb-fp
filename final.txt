@@ -108,6 +108,27 @@ SELECT year,
 	TIMESTAMPDIFF(YEAR,MAKEDATE(year,1), CURDATE()) AS timestamp_diff
 FROM pandemic.infectious_cases_table;
 
+5.
+DROP FUNCTION IF EXISTS Finalfunction;
+
+DELIMITER //
+
+CREATE FUNCTION Finalfunction(input_year YEAR)
+RETURNS INT
+DETERMINISTIC 
+BEGIN
+    DECLARE result INT;
+    SET result = TIMESTAMPDIFF(YEAR, MAKEDATE(input_year,1), CURDATE());
+    RETURN result;
+END //
+
+DELIMITER ;
+
+SELECT year,
+	MAKEDATE(year,1) AS new_year,
+	CURDATE() AS curr_date,
+    Finalfunction(year) AS timestamp_diff_function
+FROM pandemic.infectious_cases_table;
 
 
 
